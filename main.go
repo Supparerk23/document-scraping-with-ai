@@ -1,14 +1,16 @@
 package main
 
 import (
-	"context"
 	"log"
 	"os"
-
+	"os/exec"
 	"github.com/joho/godotenv"
-	"github.com/tmc/langchaingo/llms/openai"
-	"github.com/tmc/langchaingo/schema"
 	"fmt"
+	"bytes"
+
+	"document-scraping-with-ai/config"
+	aiRepository "document-scraping-with-ai/business/ai/repository"
+	// aiService "document-scraping-with-ai/business/ai/service"
 )
 
 // initialise to load environment variable from .env file
@@ -20,12 +22,14 @@ func init() {
 }
 
 func main() {
-	log.Println("\033[93mStarted. Press CTRL+C to quit.\033[0m")
-	run()
-}
 
-// call the LLM and return the response
-func run() {
+	ai := false
+	aiConfig := config.AIConfig()
+
+	aiRepository := aiRepository.NewAIRepository(aiConfig)
+	// aiService := aiService.NewAIService(aiRepository)
+
+	log.Println("\033[93mStarted. Press CTRL+C to quit.\033[0m")
 
 	path := "./assets"
 
@@ -33,7 +37,11 @@ func run() {
     if err != nil {
         log.Fatal(err)
     }
- 
+
+    testRunPython()
+
+    if ai {
+
     for _, e := range entries {
 
     	fileDirectory := fmt.Sprintf("%s/%s",path,e.Name())
@@ -47,37 +55,32 @@ func run() {
 
 	    str := string(b)
 
-	    aiCaller(str)
+	    aiRepository.OpenAI(str)
         
+    }
+
     }
 }
 
-func aiCaller(content string) {
+func testRunPython() {
 
-	prompt := struct {
-		Input string `json:"input"`
-	}{}
+	path, pathErr := os.Getwd()
+	if pathErr != nil {
+	    fmt.Print(pathErr)
+	}
+	// handle err
+	pythonPath := fmt.Sprintf("%s\\%s",path,"python\\pdf.py")
+    fmt.Println("Run python")
+    cmd := exec.Command("python", pythonPath)
 
-	prompt.Input = content
-	// create the LLM
-	llm, err := openai.NewChat(openai.WithModel(os.Getenv("OPENAI_MODEL")))
+    var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+	err := cmd.Run()
 	if err != nil {
-		fmt.Print(err)
+	    fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
+	    return
 	}
-
-	chatmsg := []schema.ChatMessage{
-		// schema.SystemChatMessage{Content: "Hello, I am a friendly AI assistant."},
-		schema.HumanChatMessage{Content: prompt.Input},
-	}
-
-	fmt.Println("Processing by AI")
-
-	aimsg, err := llm.Call(context.Background(), chatmsg)
-	if err != nil {
-		fmt.Print(err)
-	}
-
-	fmt.Println("Process Done")
-	fmt.Println(aimsg.GetContent())
-
+	fmt.Println("Result: " + out.String())
 }

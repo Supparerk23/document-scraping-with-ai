@@ -1,4 +1,4 @@
-module github.com/sausheong/breeze
+module document-scraping-with-ai
 
 go 1.20
 
