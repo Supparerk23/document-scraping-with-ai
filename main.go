@@ -6,11 +6,11 @@ import (
 	"os/exec"
 	"github.com/joho/godotenv"
 	"fmt"
-	"bytes"
 
 	"document-scraping-with-ai/config"
 	aiRepository "document-scraping-with-ai/business/ai/repository"
 	// aiService "document-scraping-with-ai/business/ai/service"
+	pdfService "document-scraping-with-ai/business/pdf/service"
 )
 
 // initialise to load environment variable from .env file
@@ -25,9 +25,14 @@ func main() {
 
 	ai := false
 	aiConfig := config.AIConfig()
-
 	aiRepository := aiRepository.NewAIRepository(aiConfig)
 	// aiService := aiService.NewAIService(aiRepository)
+
+	pdfConfig := config.PdfConfig()
+
+	cmd := exec.Command("sh", "-c", "./pipenv_script.sh")
+
+	pdfService := pdfService.NewPDFService(pdfConfig, cmd)
 
 	log.Println("\033[93mStarted. Press CTRL+C to quit.\033[0m")
 
@@ -38,7 +43,7 @@ func main() {
         log.Fatal(err)
     }
 
-    testRunPython()
+   	pdfService.ProcessPDF()
 
     if ai {
 
@@ -60,27 +65,4 @@ func main() {
     }
 
     }
-}
-
-func testRunPython() {
-
-	path, pathErr := os.Getwd()
-	if pathErr != nil {
-	    fmt.Print(pathErr)
-	}
-	// handle err
-	pythonPath := fmt.Sprintf("%s\\%s",path,"python\\pdf.py")
-    fmt.Println("Run python")
-    cmd := exec.Command("python", pythonPath)
-
-    var out bytes.Buffer
-	var stderr bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &stderr
-	err := cmd.Run()
-	if err != nil {
-	    fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
-	    return
-	}
-	fmt.Println("Result: " + out.String())
 }

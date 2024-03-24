@@ -11,3 +11,9 @@ func AIConfig() model.AIConfig {
 		OpenAIModel: os.Getenv("OPENAI_MODEL"),
 	}
 }
+
+func PdfConfig() model.PdfConfig {
+	return model.PdfConfig{
+		PathLocation: os.Getenv("PDF_PATH_LOCATION"),
+	}
+}
