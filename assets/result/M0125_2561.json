@@ -1,0 +1,70 @@
+{
+    "fund_code": "KFGOOD",
+    "performance": {
+        "annualized_return": {
+            "YTD": -1.27,
+            "3_months": 0.09,
+            "6_months": -3.45,
+            "1_year": -5.31
+        },
+        "volatility": {
+            "fund": {
+                "3_years": 4.06,
+                "5_years": 4.00,
+                "10_years": 4.06,
+                "since_inception": 4.22
+            },
+            "index": {
+                "3_years": 3.77,
+                "5_years": 3.64,
+                "10_years": 3.84,
+                "since_inception": 3.97
+            }
+        }
+    },
+    "investment_details": {
+        "purchase": {
+            "frequency": "Daily",
+            "time": "08:30 - 15:30",
+            "initial_minimum": "500 THB",
+            "subsequent_minimum": "500 THB"
+        },
+        "redemption": {
+            "frequency": "Daily",
+            "time": "08:30 - 15:30",
+            "minimum": "500 THB or 50 units",
+            "minimum_balance": "50 units",
+            "settlement_period": "Within 5 business days"
+        }
+    },
+    "fees": {
+        "mutual_fund_fee": {
+            "management": {
+                "max": 2.6750,
+                "actual": 1.2305
+            },
+            "total": {
+                "max": 5.0825,
+                "actual": 1.4264
+            }
+        },
+        "unit_holder_fee": {
+            "sale": {
+                "max": 1.50,
+                "actual": 0.65
+            },
+            "buy_back": {
+                "max": 1.50,
+                "actual": 0.65
+            },
+            "switch_in": {
+                "max": 1.50,
+                "actual": 0.65
+            },
+            "switch_out": {
+                "max": 1.50,
+                "actual": 0.65
+            }
+        }
+    }
+}

@@ -1,14 +1,14 @@
 module document-scraping-with-ai
 
-go 1.20
+go 1.22.0
 
 require (
 	github.com/joho/godotenv v1.5.1
-	github.com/tmc/langchaingo v0.0.0-20230802030916-271e9bd7e7c5
+	github.com/tmc/langchaingo v0.1.8
 )
 
 require (
-	github.com/dlclark/regexp2 v1.8.1 // indirect
-	github.com/google/uuid v1.3.0 // indirect
-	github.com/pkoukk/tiktoken-go v0.1.2 // indirect
+	github.com/dlclark/regexp2 v1.10.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
+	github.com/pkoukk/tiktoken-go v0.1.6 // indirect
 )

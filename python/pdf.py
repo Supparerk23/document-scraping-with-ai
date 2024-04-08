@@ -22,9 +22,11 @@ for file in files:
     rawText = ""
     print("Start Extract File",readFileName)
     for pageNumber, page in enumerate(pdf_reader.pages):
-        print("Read Page",pageNumber)
-        # Extract the text from the first page
+        # Extract the text from page
         text = page.extract_text()
+        # Reduce content in token by find keyword 
+        if "ค่าธรรมเนียม" not in text: 
+            continue
         rawText = rawText+text
         # Print the text
         # print(text.encode("utf-8"))

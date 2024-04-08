@@ -6,11 +6,12 @@ import (
 	"os/exec"
 	"github.com/joho/godotenv"
 	"fmt"
+	"strings"
 
 	"document-scraping-with-ai/config"
 	aiRepository "document-scraping-with-ai/business/ai/repository"
 	// aiService "document-scraping-with-ai/business/ai/service"
-	pdfService "document-scraping-with-ai/business/pdf/service"
+	opService "document-scraping-with-ai/business/operation/service"
 )
 
 // initialise to load environment variable from .env file
@@ -23,7 +24,6 @@ func init() {
 
 func main() {
 
-	ai := false
 	aiConfig := config.AIConfig()
 	aiRepository := aiRepository.NewAIRepository(aiConfig)
 	// aiService := aiService.NewAIService(aiRepository)
@@ -32,24 +32,28 @@ func main() {
 
 	cmd := exec.Command("sh", "-c", "./pipenv_script.sh")
 
-	pdfService := pdfService.NewPDFService(pdfConfig, cmd)
+	operationService := opService.NewPDFService(pdfConfig, cmd)
 
 	log.Println("\033[93mStarted. Press CTRL+C to quit.\033[0m")
 
-	path := "./assets"
+	err := operationService.ProcessPDF()
 
-	entries, err := os.ReadDir(path)
+   	if err != nil {
+        log.Fatal(err)
+    }
+
+	sourcePath := "./assets/raw"
+	resultPath := "./assets/result"
+
+	entries, err := os.ReadDir(sourcePath)
     if err != nil {
         log.Fatal(err)
     }
 
-   	pdfService.ProcessPDF()
-
-    if ai {
 
     for _, e := range entries {
 
-    	fileDirectory := fmt.Sprintf("%s/%s",path,e.Name())
+    	fileDirectory := fmt.Sprintf("%s/%s",sourcePath,e.Name())
 
     	fmt.Println("ReadFile ->",fileDirectory)
 
@@ -60,9 +64,16 @@ func main() {
 
 	    str := string(b)
 
-	    aiRepository.OpenAI(str)
-        
-    }
+	    res := aiRepository.OpenAI(str)
+
+	    fmt.Println("Res",res)
+
+	    renameFile := strings.Replace(e.Name(), ".txt", ".json", -1)
+	    resultFileDirectory := fmt.Sprintf("%s/%s",resultPath,renameFile)
+
+	    if err = operationService.WriteResult(resultFileDirectory ,res); err != nil {
+	    	fmt.Println("error write file",err)
+	    }
 
     }
 }

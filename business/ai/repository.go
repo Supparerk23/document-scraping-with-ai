@@ -1,5 +1,5 @@
 package ai
 
 type Repository interface {
-	OpenAI(content string)
+	OpenAI(content string) string
 }

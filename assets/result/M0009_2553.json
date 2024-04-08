@@ -1,0 +1,31 @@
+{
+    "fund_code": "KF-CHINA",
+    "mutual_fund_fee": {
+        "management": {
+            "max": 1.605,
+            "actual": 0.8025
+        },
+        "total": {
+            "max": 1.9795,
+            "actual": 1.0114
+        }
+    },
+    "unit_holder_fee": {
+        "sale": {
+            "max": 0.50,
+            "actual": 0.40
+        },
+        "buy_back": {
+            "max": "ไม่มี",
+            "actual": "ไม่มี"
+        },
+        "switch_in": {
+            "max": 0.50,
+            "actual": 0.40
+        },
+        "switch_out": {
+            "max": "ไม่มี",
+            "actual": "ไม่มี"
+        }
+    }
+}
