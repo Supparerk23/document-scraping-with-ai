@@ -20,7 +20,7 @@ for file in files:
     pdf_reader = PyPDF2.PdfReader(pdf_file)
     # Print the number of pages
     rawText = ""
-    print("Start Extract File",readFileName)
+    # print("Start Extract File",readFileName)
     for pageNumber, page in enumerate(pdf_reader.pages):
         # Extract the text from page
         text = page.extract_text()
@@ -33,7 +33,7 @@ for file in files:
 
     # Write file
     with open(writeFileName, 'w', encoding='utf-8') as f:
-        print("Write File",writeFileName)
+        # print("Write File",writeFileName)
         f.write(rawText)
     # Close the PDF file
     pdf_file.close()

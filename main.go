@@ -10,7 +10,7 @@ import (
 
 	"document-scraping-with-ai/config"
 	aiRepository "document-scraping-with-ai/business/ai/repository"
-	// aiService "document-scraping-with-ai/business/ai/service"
+	aiService "document-scraping-with-ai/business/ai/service"
 	opService "document-scraping-with-ai/business/operation/service"
 )
 
@@ -26,7 +26,7 @@ func main() {
 
 	aiConfig := config.AIConfig()
 	aiRepository := aiRepository.NewAIRepository(aiConfig)
-	// aiService := aiService.NewAIService(aiRepository)
+	aiService := aiService.NewAIService(aiRepository)
 
 	pdfConfig := config.PdfConfig()
 
@@ -50,23 +50,21 @@ func main() {
         log.Fatal(err)
     }
 
-
     for _, e := range entries {
 
     	fileDirectory := fmt.Sprintf("%s/%s",sourcePath,e.Name())
 
-    	fmt.Println("ReadFile ->",fileDirectory)
-
-    	b, err := os.ReadFile(fileDirectory) // just pass the file name
+    	b, err := os.ReadFile(fileDirectory)
 	    if err != nil {
 	        fmt.Print(err)
 	    }
 
 	    str := string(b)
 
-	    res := aiRepository.OpenAI(str)
-
-	    fmt.Println("Res",res)
+	    res, err := aiService.ProcessAI(str)
+	    if err != nil {
+	    	fmt.Print(err)
+	    }
 
 	    renameFile := strings.Replace(e.Name(), ".txt", ".json", -1)
 	    resultFileDirectory := fmt.Sprintf("%s/%s",resultPath,renameFile)
@@ -76,4 +74,6 @@ func main() {
 	    }
 
     }
+
+    log.Println("\033[93mDone.\033[0m")
 }

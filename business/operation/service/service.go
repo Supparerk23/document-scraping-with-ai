@@ -24,8 +24,8 @@ func (s *service)ProcessPDF() error {
 	    fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
 	    return err
 	}
-	fmt.Println("Result: " + out.String())
-	fmt.Println("Command finished")
+	// fmt.Println("Result: " + out.String())
+	// fmt.Println("Command finished")
 	return nil
 }
 
@@ -35,13 +35,15 @@ func (s *service)WriteResult(path string, res string) error {
 	if err != nil {
 		return err
 	}
-	l, err := f.WriteString(res)
+
+	// l, err := f.WriteString(res)
+	_, err = f.WriteString(res)
 	if err != nil {
         f.Close()
 		return err
 	}
 
-	fmt.Println(l, "bytes written successfully")
+	// fmt.Println(l, "bytes written successfully")
 	err = f.Close()
 	if err != nil {
 		return err

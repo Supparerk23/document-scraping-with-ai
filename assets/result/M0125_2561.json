@@ -7,6 +7,12 @@
             "6_months": -3.45,
             "1_year": -5.31
         },
+        "average_return_same_category": {
+            "YTD": -0.82,
+            "3_months": 3.30,
+            "6_months": -2.32,
+            "1_year": -3.63
+        },
         "volatility": {
             "fund": {
                 "3_years": 4.06,
@@ -24,17 +30,18 @@
     },
     "investment_details": {
         "purchase": {
-            "frequency": "Daily",
-            "time": "08:30 - 15:30",
-            "initial_minimum": "500 THB",
-            "subsequent_minimum": "500 THB"
+            "minimum_initial": 500,
+            "minimum_subsequent": 500,
+            "purchase_day": "Every banking business day",
+            "purchase_time": "08:30 - 15:30"
         },
         "redemption": {
-            "frequency": "Daily",
-            "time": "08:30 - 15:30",
-            "minimum": "500 THB or 50 units",
-            "minimum_balance": "50 units",
-            "settlement_period": "Within 5 business days"
+            "minimum": 500,
+            "minimum_units": 50,
+            "minimum_balance": 50,
+            "redemption_day": "Every banking business day",
+            "redemption_time": "08:30 - 15:30",
+            "settlement_period": "Within 5 banking days"
         }
     },
     "fees": {
