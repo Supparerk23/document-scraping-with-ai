@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"fmt"
 	"strings"
+	"time"
 
 	"document-scraping-with-ai/config"
 	aiRepository "document-scraping-with-ai/business/ai/repository"
@@ -24,9 +25,16 @@ func init() {
 
 func main() {
 
+	start := time.Now()
+
+	// Init Redis connection
+	config.InitRedis()
+	redisClient := config.GetRedis()
+	defer config.CloseRedis()
+
 	aiConfig := config.AIConfig()
 	aiRepository := aiRepository.NewAIRepository(aiConfig)
-	aiService := aiService.NewAIService(aiRepository)
+	aiService := aiService.NewAIService(aiRepository,redisClient)
 
 	pdfConfig := config.PdfConfig()
 
@@ -71,7 +79,7 @@ func main() {
 		    }
 
 		    // this return should save data to database
-			fmt.Println("Save to database",res.ResultWithStruct)
+			// fmt.Println("Save to database",res.ResultWithStruct)
 
 		    renameFileRaw := strings.Replace(e.Name(), ".txt", ".json", -1)
 
@@ -81,9 +89,18 @@ func main() {
 		    	fmt.Println("error write file",err)
 		    }
 
+		    e := os.Remove(fileDirectory) 
+		    if e != nil { 
+		        log.Fatal(e) 
+		    }
+
+		    fmt.Println("Del File >",fileDirectory)
+
 	    }
 
     }
 
-    log.Println("\x1b[46mDone.\033[0m")
+    elapsed := time.Since(start)
+    // fmt.Sprintf("\x1b[46mDone.\033[0m - complete, Elapsed time %s",elapsed)
+    log.Printf("\x1b[46mDone.\033[0m - complete, Elapsed time %s",elapsed)
 }

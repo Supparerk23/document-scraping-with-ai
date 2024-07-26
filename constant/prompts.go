@@ -6,7 +6,7 @@ const (
 		<instruction>
 		- Read input of Fund Factsheet.
 		- Map data with JSON structure "%s".
-		- When gathered all the value and fill data to json alredy, For another data not included in main structure should create new object name "other" in the end of main structure and fill what value you can read to that object.
+		- When gathered all the value and fill data to json already, For another data not included in main structure should create new object name "other" in the end of main structure and fill what value you can read to that object.
 		</instruction>
 
 		<mandatory-rules>
