@@ -5,32 +5,37 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/openai"
 	"github.com/tmc/langchaingo/schema"
 
 	"document-scraping-with-ai/model"
+	"document-scraping-with-ai/constant"
 )
 
-func(r *AIRepository) OpenAI(str string) (string, error) {
+func(r *AIRepository) OpenAI(str string) (model.AIResponse, error) {
+
+	output := model.AIResponse{}
 
 	llm, err := openai.New(openai.WithModel(r.aiConfig.OpenAIModel))
 	if err != nil {
-		return "", err
+		return output, err
 	}
 
 	outputTemplate := model.ReturnTemplate{}
 
 	template, err := json.Marshal(outputTemplate)
     if err != nil {
-        return "", err
+        return output, err
     }
 
 	ctx := context.Background()
 
+	SystemPrompt :=  fmt.Sprintf(constant.SystemPrompt,string(template))
+
 	content := []llms.MessageContent{
-		llms.TextParts(schema.ChatMessageTypeSystem , "You are reading Fund Factsheet and helpful assistant designed to output JSON structured by assistant."),
-		llms.TextParts(schema.ChatMessageTypeAI,string(template)),
+		llms.TextParts(schema.ChatMessageTypeSystem ,SystemPrompt),
 		llms.TextParts(schema.ChatMessageTypeGeneric , str),
 	}
 
@@ -44,9 +49,10 @@ func(r *AIRepository) OpenAI(str string) (string, error) {
 		panic(err)
 	}
 
-	fmt.Println(outputTemplate.FundCode)
+	output.ResultWithStruct = outputTemplate
+	output.RawResult = resp.Choices[0].Content
 
-	return resp.Choices[0].Content, nil
+	return output, nil
 
 }
 

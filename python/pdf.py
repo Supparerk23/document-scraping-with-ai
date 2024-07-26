@@ -12,7 +12,7 @@ for file in files:
     if ".pdf" not in file: 
         continue
     readFileName = dirpath+file
-    writeFileName = dirpath+"raw/"+file.replace(".pdf", ".txt")
+    writeFileName = dirpath+"/"+file.replace(".pdf", "_raw.txt")
    
     # Open the PDF file
     pdf_file = open(readFileName, 'rb')

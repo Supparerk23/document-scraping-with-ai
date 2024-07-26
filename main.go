@@ -34,7 +34,7 @@ func main() {
 
 	operationService := opService.NewPDFService(pdfConfig, cmd)
 
-	log.Println("\033[93mStarted. Press CTRL+C to quit.\033[0m")
+	log.Println("\x1b[46mStarted. Press CTRL+C to quit.\033[0m")
 
 	err := operationService.ProcessPDF()
 
@@ -42,7 +42,7 @@ func main() {
         log.Fatal(err)
     }
 
-	sourcePath := "./assets/raw"
+	sourcePath := "./assets"
 	resultPath := "./assets/result"
 
 	entries, err := os.ReadDir(sourcePath)
@@ -52,28 +52,38 @@ func main() {
 
     for _, e := range entries {
 
-    	fileDirectory := fmt.Sprintf("%s/%s",sourcePath,e.Name())
+    	if strings.Contains(e.Name(), "raw") {
 
-    	b, err := os.ReadFile(fileDirectory)
-	    if err != nil {
-	        fmt.Print(err)
-	    }
+	    	fileDirectory := fmt.Sprintf("%s/%s",sourcePath,e.Name())
 
-	    str := string(b)
+	    	fmt.Println("Process File >",fileDirectory)
 
-	    res, err := aiService.ProcessAI(str)
-	    if err != nil {
-	    	fmt.Print(err)
-	    }
+	    	b, err := os.ReadFile(fileDirectory)
+		    if err != nil {
+		        fmt.Print(err)
+		    }
 
-	    renameFile := strings.Replace(e.Name(), ".txt", ".json", -1)
-	    resultFileDirectory := fmt.Sprintf("%s/%s",resultPath,renameFile)
+		    str := string(b)
 
-	    if err = operationService.WriteResult(resultFileDirectory ,res); err != nil {
-	    	fmt.Println("error write file",err)
+		    res, err := aiService.ProcessAI(str)
+		    if err != nil {
+		    	fmt.Print(err)
+		    }
+
+		    // this return should save data to database
+			fmt.Println("Save to database",res.ResultWithStruct)
+
+		    renameFileRaw := strings.Replace(e.Name(), ".txt", ".json", -1)
+
+		    fmt.Println("Save File >",renameFileRaw)
+
+		    if err = operationService.WriteResult(fmt.Sprintf("%s/%s",resultPath,renameFileRaw) ,res.RawResult); err != nil {
+		    	fmt.Println("error write file",err)
+		    }
+
 	    }
 
     }
 
-    log.Println("\033[93mDone.\033[0m")
+    log.Println("\x1b[46mDone.\033[0m")
 }

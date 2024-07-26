@@ -22,3 +22,8 @@ type ReturnTemplate struct {
 	MutualFundFee MutualFundFee `json:"mutual_fund_fee"`
 	UnitHolderFee UnitHolderFee `json:"unit_holder_fee"`
 }
+
+type AIResponse struct {
+	ResultWithStruct ReturnTemplate `json:"result"`
+	RawResult string `json:"raw_result"`
+}

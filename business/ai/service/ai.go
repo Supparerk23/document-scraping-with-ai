@@ -1,9 +1,13 @@
 package service
 
-func (s *service)ProcessAI(content string) (string, error) {
+import (
+	"document-scraping-with-ai/model"
+)
+
+func (s *service)ProcessAI(content string) (model.AIResponse, error) {
 	res, err := s.aiRepo.OpenAI(content)
 	if err != nil {
-		return "", err
+		return model.AIResponse{}, err
 	}
 	return res, nil
 }
