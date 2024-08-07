@@ -19,6 +19,7 @@ type UnitHolderFee struct {
 
 type ReturnTemplate struct {
 	FundCode      string        `json:"fund_code"`
+	IssuedOnDate      string        `json:"issued_on_date"`
 	MutualFundFee MutualFundFee `json:"mutual_fund_fee"`
 	UnitHolderFee UnitHolderFee `json:"unit_holder_fee"`
 }

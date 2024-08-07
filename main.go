@@ -73,6 +73,10 @@ func main() {
 
 		    str := string(b)
 
+		    if len(str) == 0 {
+		    	return
+		    }
+
 		    res, err := aiService.ProcessAI(str)
 		    if err != nil {
 		    	fmt.Print(err)

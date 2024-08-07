@@ -13,6 +13,5 @@ const (
 		- All messages or value you save to json structure must be in the English language or Number only.
 		- For the empty value must be "0.00" , "N/A" or null depend on before context or object name.
 		</mandatory-rules>
-
 		`
 )
