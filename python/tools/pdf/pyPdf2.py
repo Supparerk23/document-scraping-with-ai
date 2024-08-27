@@ -1,29 +1,15 @@
 import PyPDF2
-from os import walk
+from constants.keyword import *
 
-# Open directory
-
-files = []
-issued_on_date_keyword = "ข้อมูล ณ วันที่"
-fee_keyword = "ค่าธรรมเนียม"
-
-for (dirpath, dirnames, filenames) in walk("../assets/"):
-    files.extend(filenames)
-    break
-
-for file in files:
-    if ".pdf" not in file: 
-        continue
-    readFileName = dirpath+file
-    writeFileName = dirpath+"/"+file.replace(".pdf", "_raw.txt")
-   
-    # Open the PDF file
-    pdf_file = open(readFileName, 'rb')
+def process(inputFile,outputFile):
+     # Open the PDF file
+    pdf_file = open(inputFile, 'rb')
     # Read the PDF file
     pdf_reader = PyPDF2.PdfReader(pdf_file)
     # Print the number of pages
     rawText = ""
-    # print("# Start Extract File",readFileName)
+    # print("# Start Extract File",inputFile)   
+   
     for pageNumber, page in enumerate(pdf_reader.pages):
         # Extract the text from page
         text = page.extract_text()
@@ -32,15 +18,15 @@ for file in files:
         #     # pureText = text.replace(' ', '')
         #     print(text)
         #     print("---------")
-        if issued_on_date_keyword in text:
-            # print("have issued_on_date_keyword on page",pageNumber)
-            issued_on_date_index = text.index(issued_on_date_keyword)
+        if ISSUED_ON_DATE_KEYWORD in text:
+            # print("have ISSUED_ON_DATE_KEYWORD on page",pageNumber)
+            issued_on_date_index = text.index(ISSUED_ON_DATE_KEYWORD)
             last_issued_on_date_index = issued_on_date_index + 50
             # print("index",issued_on_date_index)
             # print(text[issued_on_date_index:last_issued_on_date_index])
             rawText = text[issued_on_date_index:last_issued_on_date_index]
         # Reduce content in token by find keyword 
-        if fee_keyword not in text: 
+        if FEE_KEYWORD not in text: 
             continue
         rawText = rawText+text
         # Print the text
@@ -49,11 +35,11 @@ for file in files:
     if len(rawText) == 0:
         # Close the PDF file
         pdf_file.close()
-        print("Can't read file",readFileName)
+        print("Can't read file",inputFile)
     else: 
         # Write file
-        with open(writeFileName, 'w', encoding='utf-8') as f:
-            # print("Write File",writeFileName)
+        with open(outputFile, 'w', encoding='utf-8') as f:
+            # print("Write File",outputFile)
             f.write(rawText)
         # Close the PDF file
         pdf_file.close()

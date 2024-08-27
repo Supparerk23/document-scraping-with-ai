@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Run pipenv
-cd python && pipenv run python pdf.py
+cd python && pipenv run python main.py

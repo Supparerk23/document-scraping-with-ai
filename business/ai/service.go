@@ -5,5 +5,5 @@ import (
 )
 
 type Service interface {
-	ProcessAI(content string) (model.AIResponse, error)
+	ProcessAI(orginalName string, content string) (model.AIResponse, error)
 }

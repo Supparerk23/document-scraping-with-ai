@@ -64,6 +64,8 @@ func main() {
 
 	    	fileDirectory := fmt.Sprintf("%s/%s",sourcePath,e.Name())
 
+	    	originalFileName := strings.Replace(e.Name(), "_raw.txt", "", -1)
+
 	    	fmt.Println("Process File >",fileDirectory)
 
 	    	b, err := os.ReadFile(fileDirectory)
@@ -74,10 +76,11 @@ func main() {
 		    str := string(b)
 
 		    if len(str) == 0 {
+		    	fmt.Println("File : ",fileDirectory,"is empty.")
 		    	return
 		    }
 
-		    res, err := aiService.ProcessAI(str)
+		    res, err := aiService.ProcessAI(originalFileName,str)
 		    if err != nil {
 		    	fmt.Print(err)
 		    }
@@ -87,7 +90,7 @@ func main() {
 
 		    renameFileRaw := strings.Replace(e.Name(), ".txt", ".json", -1)
 
-		    fmt.Println("Save File >",renameFileRaw)
+		    // fmt.Println("Save File >",renameFileRaw)
 
 		    if err = operationService.WriteResult(fmt.Sprintf("%s/%s",resultPath,renameFileRaw) ,res.RawResult); err != nil {
 		    	fmt.Println("error write file",err)
@@ -98,7 +101,7 @@ func main() {
 		        log.Fatal(e) 
 		    }
 
-		    fmt.Println("Del File >",fileDirectory)
+		    // fmt.Println("Del File >",fileDirectory)
 
 	    }
 

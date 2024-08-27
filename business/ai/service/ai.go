@@ -8,15 +8,16 @@ import (
 	"time"
 )
 
-func (s *service)ProcessAI(content string) (model.AIResponse, error) {
+func (s *service)ProcessAI(orginalName string, content string) (model.AIResponse, error) {
 
 	var result model.AIResponse
 
-	key := b64.StdEncoding.EncodeToString([]byte(content))
-   
+	contentEncoding := b64.StdEncoding.EncodeToString([]byte(content))
+	key := orginalName+"_"+contentEncoding[:10]+"_"+contentEncoding[len(contentEncoding)-10:]
+
 	found := true
 		    
-	data, err := s.redisClient.Get(key).Bytes()
+	data, err := s.redisClient.Get(key).Bytes() 
 
 	if err != nil {
 		found = false
@@ -33,9 +34,7 @@ func (s *service)ProcessAI(content string) (model.AIResponse, error) {
 		if err != nil {
 			return model.AIResponse{}, err
 		}
-
-		fmt.Println("-> api process")
-
+		// fmt.Println("-> api process")
 		// res.ResultWithStruct
 		dataByte, err := json.Marshal(res)
 		
@@ -47,6 +46,6 @@ func (s *service)ProcessAI(content string) (model.AIResponse, error) {
 		return res, nil
 
 	}
-	fmt.Println("-> user from cache")
+	// fmt.Println("-> user from cache")
 	return result, nil
 }
