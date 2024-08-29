@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 pypdf2 = "*"
 pdfplumber = "*"
+redis = {extras = ["hiredis"], version = "*"}
+python-dotenv = "*"
 
 [dev-packages]
 
